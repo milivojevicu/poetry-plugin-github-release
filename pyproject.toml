@@ -1,0 +1,55 @@
+[tool.poetry]
+name = "poetry-github-release-plugin"
+version = "1.0.0"
+description = ""
+authors = ["Uroš Milivojević <milivojevicu1998@gmail.com>"]
+readme = "README.md"
+packages = [{include = "poetry_github_release_plugin"}]
+
+[tool.poetry.dependencies]
+python = "^3.7.2"
+requests = "^2.28.1"
+poetry = "^1.2.1"
+
+[tool.poetry.group.dev.dependencies]
+isort = "^5.10.1"
+black = "^22.8.0"
+pycln = "^2.1.1"
+pylint = "^2.15.3"
+
+[tool.poetry.plugins."poetry.application.plugin"]
+github-release = "poetry_github_release_plugin.plugin:GitHubReleasePlugin"
+
+[tool.pylint.basic]
+fail-under = 9.0
+py-version = "3.7.0"
+jobs = 0
+good-names = [ "i", "j", "k", "ex", "Run", "_", "id", "x", "y" ]
+
+[tool.pylint.messages_control]
+disable = [
+	"missing-docstring",
+	"import-error",
+	"arguments-differ",
+]
+enable = "c-extension-no-member"
+
+[tool.pylint.format]
+max-line-length = 100
+max-module-lines = 1000
+indent-after-paren = 4
+
+[tool.isort]
+profile = "black"
+
+[tool.pycln]
+all = true
+exclude = "__init__.py"
+
+[tool.black]
+line-length = 100
+target-version = ["py37", "py38", "py39", "py310"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
