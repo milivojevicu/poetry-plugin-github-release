@@ -146,18 +146,40 @@ class ReleaseCommand(Command):
         # Upload asset.
         with open(asset, "rb") as file:
             data: bytes = file.read()
-            response = requests.post(
-                url=release.url_upload,
-                auth=(username, token),
-                params=[("name", os.path.basename(asset))],
-                files={"file": ("file", data, "application/octet-stream")},
-            )
+
+        # Deterine the data type of the asset.
+        content_type_bytes = "application/octet-stream"
+        content_type = {
+            ".gz": "application/gzip",
+        }.get(os.path.splitext(asset)[-1], content_type_bytes)
+
+        # Prepare asset data for upload. This makes the octet-stream data upload as
+        # 'multipart/form-data'. GitHub API requires this, not sure why. And if other
+        # data type, such as gzip, are uploaded the same way, they get corrupted; so
+        # they are uploaded without multipart.
+        kwargs = {}
+        if content_type == content_type_bytes:
+            kwargs["files"] = {"file": ("file", data, content_type)}
+        else:
+            kwargs["data"] = data
+            kwargs["headers"] = {"Content-Type": content_type}
+
+        # Post the file.
+        response = requests.post(
+            url=release.url_upload,
+            auth=(username, token),
+            params=[("name", os.path.basename(asset))],
+            **kwargs,
+        )
 
         # If request wasn't successful, return an error.
         if response.status_code != 201:
-            return f"Request failed with status code {response.status_code}:\n" + json.dumps(
-                response.json(), indent=4
-            ) + "\n" + str(response.request.headers)
+            return (
+                f"Request failed with status code {response.status_code}:\n"
+                + json.dumps(response.json(), indent=4)
+                + "\n"
+                + str(response.request.headers)
+            )
 
     def __get_built_files(self, version: str) -> List[Path]:
         """ """
@@ -232,7 +254,9 @@ class ReleaseCommand(Command):
 
         # Display successful release creation.
         self.line(f"Release v{version} created and accessable through the following URL:")
-        self.line(f"  https://github.com/{remote.repo_owner}/{remote.repo_name}/releases/tag/v{version}")
+        self.line(
+            f"  https://github.com/{remote.repo_owner}/{remote.repo_name}/releases/tag/v{version}"
+        )
 
         # Files to be uploaded as assets.
         files: List[Path] = self.__get_built_files(version)
