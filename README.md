@@ -3,6 +3,28 @@
 A plugin for Poetry that adds a `release` subcommand which creates a new release on GitHub,
 and with that a new Git tag as well.
 
+### Installation
+
+Using `poetry`:
+
+```bash
+$ poetry self add git+https://github.com/milivojevicu/poetry-plugin-github-release
+```
+
+Using `pipx inject`:
+
+```bash
+pipx inject poetry git+https://github.com/milivojevicu/poetry-plugin-github-release
+```
+
+Using `pip`:
+
+```bash
+pip install git+https://github.com/milivojevicu/poetry-plugin-github-release
+```
+
+More details at: [python-poetry.org/docs/plugins](https://python-poetry.org/docs/plugins/#using-plugins)
+
 ### Usage
 
 ```bash
