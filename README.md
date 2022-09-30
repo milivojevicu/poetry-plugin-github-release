@@ -1,9 +1,14 @@
-## GitHub Release plugin for [Poetry](https://github.com/python-poetry/poetry)
+# GitHub Release plugin for [Poetry](https://github.com/python-poetry/poetry)
+
+[![black](https://github.com/milivojevicu/poetry-plugin-github-release/actions/workflows/black.yml/badge.svg)](https://github.com/milivojevicu/poetry-plugin-github-release/actions/workflows/black.yml)
+[![isort](https://github.com/milivojevicu/poetry-plugin-github-release/actions/workflows/isort.yml/badge.svg)](https://github.com/milivojevicu/poetry-plugin-github-release/actions/workflows/isort.yml)
+[![pycln](https://github.com/milivojevicu/poetry-plugin-github-release/actions/workflows/pycln.yml/badge.svg)](https://github.com/milivojevicu/poetry-plugin-github-release/actions/workflows/pycln.yml)
+[![pylint](https://github.com/milivojevicu/poetry-plugin-github-release/actions/workflows/pylint.yml/badge.svg)](https://github.com/milivojevicu/poetry-plugin-github-release/actions/workflows/pylint.yml)
 
 A plugin for Poetry that adds a `release` subcommand which creates a new release on GitHub,
 and with that a new Git tag as well.
 
-### Installation
+## Installation
 
 Using `poetry`:
 
@@ -25,7 +30,7 @@ $ pip install git+https://github.com/milivojevicu/poetry-plugin-github-release
 
 More details at: [python-poetry.org/docs/plugins](https://python-poetry.org/docs/plugins/#using-plugins)
 
-### Usage
+## Usage
 
 ```bash
 $ poetry release
