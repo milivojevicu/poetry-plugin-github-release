@@ -26,14 +26,6 @@ py-version = "3.7.0"
 jobs = 0
 good-names = [ "i", "j", "k", "ex", "Run", "_", "id", "x", "y" ]
 
-[tool.pylint.messages_control]
-disable = [
-	"missing-docstring",
-	"import-error",
-	"arguments-differ",
-]
-enable = "c-extension-no-member"
-
 [tool.pylint.format]
 max-line-length = 100
 max-module-lines = 1000
