@@ -14,13 +14,13 @@ $ poetry self add git+https://github.com/milivojevicu/poetry-plugin-github-relea
 Using `pipx inject`:
 
 ```bash
-pipx inject poetry git+https://github.com/milivojevicu/poetry-plugin-github-release
+$ pipx inject poetry git+https://github.com/milivojevicu/poetry-plugin-github-release
 ```
 
 Using `pip`:
 
 ```bash
-pip install git+https://github.com/milivojevicu/poetry-plugin-github-release
+$ pip install git+https://github.com/milivojevicu/poetry-plugin-github-release
 ```
 
 More details at: [python-poetry.org/docs/plugins](https://python-poetry.org/docs/plugins/#using-plugins)
