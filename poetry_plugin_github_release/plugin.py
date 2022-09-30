@@ -292,15 +292,25 @@ class ReleaseCommand(Command):
 
 
 def factory() -> Command:
-    """ """
+    """
+    Factory used for add the `release` subcommand instead of adding the subcommand directory.
+
+    :return: A new instance of the `ReleaseCommand` class.
+    """
 
     return ReleaseCommand()
 
 
 class GitHubReleasePlugin(ApplicationPlugin):
-    """ """
+    """Main plugin class."""
 
     def activate(self, application: Application):
-        """ """
+        """
+        This method is called by `poetry` to initialize the plugin.
+        Used to add the `release` subcommand.
+        """
 
+        # Add the subcommand by register a factory. This way is recommended instead of the
+        # `application.add` method, as per `poetry` documentation:
+        # https://python-poetry.org/docs/plugins/#application-plugins
         application.command_loader.register_factory(ReleaseCommand.name, factory)
