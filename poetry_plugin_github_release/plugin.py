@@ -20,6 +20,8 @@ from poetry.plugins.application_plugin import ApplicationPlugin
 
 @dataclass
 class GitHubRelease:
+    """ """
+
     uid: int = -1
     url: str = ""
     url_upload: str = ""
@@ -27,6 +29,8 @@ class GitHubRelease:
 
 @dataclass
 class GitRemote:
+    """ """
+
     name: str = ""
     url: str = ""
     repo_name: str = ""
@@ -116,6 +120,7 @@ class ReleaseCommand(Command):
                 "target_commitish": "main",
                 "generate_release_notes": True,
             },
+            timeout=60,
         )
 
         # If request wasn't successful, return an error.
@@ -170,6 +175,7 @@ class ReleaseCommand(Command):
             auth=(username, token),
             params=[("name", os.path.basename(asset))],
             **kwargs,
+            timeout=120,
         )
 
         # If request wasn't successful, return an error.
@@ -233,9 +239,11 @@ class ReleaseCommand(Command):
         # Get a token from the environment.
         if "GITHUB_TOKEN" not in os.environ:
             self.line(
-                "In order to authenticate with GitHub, a PAT needs to be specified through a 'GITHUB_TOKEN' environment variable."
+                "In order to authenticate with GitHub, a PAT needs to be specified through a"
+                " 'GITHUB_TOKEN' environment variable."
             )
             return 4
+
         github_token = os.environ["GITHUB_TOKEN"]
 
         # Get the username from the git configuration.
