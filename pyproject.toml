@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "poetry-plugin-github-release"
-version = "0.1.0"
+version = "0.2.0"
 description = "A plugin for Poetry that adds a `release` subcommand which creates a new release on GitHub, and with that a new Git tag as well."
 authors = ["Uroš Milivojević <milivojevicu1998@gmail.com>"]
 readme = "README.md"
