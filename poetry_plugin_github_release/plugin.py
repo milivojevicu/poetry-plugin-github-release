@@ -44,7 +44,6 @@ class ReleaseCommand(Command):
 
     name: str = "release"
     description: str = "Create a git tag and a GitHub release."
-    # arguments = [argument("cache", description="The name of the cache to clear.")]
     options = [option("--pre-release", "-p", description="Mark the release as a pre-release.")]
 
     _poetry: Poetry = Factory().create_poetry()
