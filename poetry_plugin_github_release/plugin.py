@@ -1,4 +1,5 @@
 """
+Poetry plugin and subcommand for creating GitHub releases.
 """
 
 import json
@@ -20,7 +21,7 @@ from poetry.plugins.application_plugin import ApplicationPlugin
 
 @dataclass
 class GitHubRelease:
-    """ """
+    """Represents an instance of a GitHub release."""
 
     uid: int = -1
     url: str = ""
@@ -29,7 +30,7 @@ class GitHubRelease:
 
 @dataclass
 class GitRemote:
-    """ """
+    """Represents an instance of a Git remote, read from the configuration."""
 
     name: str = ""
     url: str = ""
@@ -38,7 +39,7 @@ class GitRemote:
 
 
 class ReleaseCommand(Command):
-    """ """
+    """A command for creating releases on GitHub (and Git tags)."""
 
     name: str = "release"
     description: str = "Create a git tag and a GitHub release."
@@ -46,7 +47,13 @@ class ReleaseCommand(Command):
     _poetry: Poetry = Factory().create_poetry()
 
     def __find_git_remotes(self, lines: List[str]) -> List[GitRemote]:
-        """ """
+        """
+        Finds remotes in the Git configuration.
+
+        :arg lines: Lines in the configuration file.
+
+        :return: A list of Git remotes.
+        """
 
         remote_pattern = re.compile(r'\[remote "([a-z]*)"\]\n')
         remotes: List[GitRemote] = []
@@ -104,7 +111,17 @@ class ReleaseCommand(Command):
     def __github_create_release(
         self, remote: GitRemote, version: str, username: str, token: str
     ) -> Union[GitHubRelease, str]:
-        """ """
+        """
+        Creates a release on GitHub.
+
+        :arg remote: A Git remote instance. The repository name and owner are read from here.
+        :arg version: Version of the software being released.
+        :arg username: GitHub username.
+        :arg token: GitHub token.
+
+        :return: The created GitHub release object, or an error message if release creation was not
+            successful.
+        """
 
         # Construct the URL for the releases endpoint of GitHub API.
         github_api_releases = (
@@ -142,7 +159,16 @@ class ReleaseCommand(Command):
     def __github_upload_asset(
         self, asset: Path, release: GitHubRelease, username: str, token: str
     ) -> Optional[str]:
-        """ """
+        """
+        Upload assets to an existing GitHub release.
+
+        :arg asset: Path to the asset.
+        :arg release: GitHub release instance.
+        :arg username: GitHub username.
+        :arg token: GitHub token.
+
+        :return: `None` on success, otherwise an error message.
+        """
 
         # Make sure that the provided asset does exist.
         if not os.path.exists(asset) or not os.path.isfile(asset):
@@ -188,7 +214,13 @@ class ReleaseCommand(Command):
             )
 
     def __get_built_files(self, version: str) -> List[Path]:
-        """ """
+        """
+        Find files created by the `poetry build` command.
+
+        :arg version: Version of the build to look for.
+
+        :return: A list of paths to build output files.
+        """
 
         dist = self._poetry.file.parent / "dist"
         wheels = list(dist.glob(f"{escape_name(self._poetry.package.pretty_name)}-{version}-*.whl"))
@@ -197,7 +229,11 @@ class ReleaseCommand(Command):
         return sorted(wheels + tars)
 
     def handle(self) -> int:
-        """ """
+        """
+        Comand entry point.
+
+        :return: Status code.
+        """
 
         # Check if "version" field exists in the Poetry configuration.
         if "version" not in self._poetry.local_config:
@@ -308,6 +344,8 @@ class GitHubReleasePlugin(ApplicationPlugin):
         """
         This method is called by `poetry` to initialize the plugin.
         Used to add the `release` subcommand.
+
+        :arg application: The command-line application this plugin is attached to.
         """
 
         # Add the subcommand by register a factory. This way is recommended instead of the
