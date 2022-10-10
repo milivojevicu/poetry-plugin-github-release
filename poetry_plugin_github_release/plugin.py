@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import List, Optional, Union
 
 import requests
+from cleo.helpers import option
 from poetry.console.application import Application
 from poetry.console.commands.command import Command
 from poetry.core.factory import Factory
@@ -43,6 +44,7 @@ class ReleaseCommand(Command):
 
     name: str = "release"
     description: str = "Create a git tag and a GitHub release."
+    options = [option("--pre-release", "-p", description="Mark the release as a pre-release.")]
 
     _poetry: Poetry = Factory().create_poetry()
 
@@ -109,7 +111,7 @@ class ReleaseCommand(Command):
         return remotes
 
     def __github_create_release(
-        self, remote: GitRemote, version: str, username: str, token: str
+        self, remote: GitRemote, version: str, username: str, token: str, pre_release: bool
     ) -> Union[GitHubRelease, str]:
         """
         Creates a release on GitHub.
@@ -118,6 +120,7 @@ class ReleaseCommand(Command):
         :arg version: Version of the software being released.
         :arg username: GitHub username.
         :arg token: GitHub token.
+        :arg pre_release: If this release should be a pre-release.
 
         :return: The created GitHub release object, or an error message if release creation was not
             successful.
@@ -136,6 +139,7 @@ class ReleaseCommand(Command):
                 "tag_name": version,
                 "target_commitish": "main",
                 "generate_release_notes": True,
+                "prerelease": pre_release,
             },
             timeout=60,
         )
@@ -242,6 +246,14 @@ class ReleaseCommand(Command):
 
         # Get the version string.
         version: str = self._poetry.local_config["version"]
+        short_version: str = version
+        if "-" in version:
+            split_version = version.split("-")
+            short_version = (
+                split_version[0]
+                + split_version[1][0]
+                + "".join(char for char in split_version[1] if char.isnumeric())
+            )
         # Get the root directory of project.
         project_root_path: str = os.path.split(self._poetry.file.path)[0]
         # Get the git configuration file in the project root.
@@ -290,7 +302,11 @@ class ReleaseCommand(Command):
 
         # Create a git tag and a GitHub release.
         github_release = self.__github_create_release(
-            remote=remote, version="v" + version, username=github_username, token=github_token
+            remote=remote,
+            version="v" + version,
+            username=github_username,
+            token=github_token,
+            pre_release=self.option("pre-release", False),
         )
         if isinstance(github_release, str):
             self.line(github_release)
@@ -303,7 +319,7 @@ class ReleaseCommand(Command):
         )
 
         # Files to be uploaded as assets.
-        files: List[Path] = self.__get_built_files(version)
+        files: List[Path] = self.__get_built_files(short_version)
 
         if len(files) > 0:
             self.line(f"Attempting to attach {len(files)} asset(s) to the release.")
