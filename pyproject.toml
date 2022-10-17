@@ -9,7 +9,7 @@ packages = [{include = "poetry_plugin_github_release"}]
 [tool.poetry.dependencies]
 python = "^3.7.2"
 requests = "^2.28.1"
-poetry = "^1.2.1"
+poetry = "^1.2.2"
 
 [tool.poetry.group.dev.dependencies]
 isort = "^5.10.1"
