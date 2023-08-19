@@ -15,7 +15,7 @@ poetry = "^1.3.1"
 isort = "^5.10.1"
 black = "^22.8.0"
 pycln = "^2.1.1"
-pylint = "^2.15.3"
+pylint = "^2.17.2"
 
 [tool.poetry.plugins."poetry.application.plugin"]
 github-release = "poetry_plugin_github_release.plugin:GitHubReleasePlugin"
