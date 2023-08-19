@@ -14,7 +14,7 @@ poetry = "^1.5.1"
 [tool.poetry.group.dev.dependencies]
 isort = "^5.11.5"
 black = "^22.8.0"
-pycln = "^2.1.1"
+pycln = "^2.2.2"
 pylint = "^2.17.2"
 
 [tool.poetry.plugins."poetry.application.plugin"]
