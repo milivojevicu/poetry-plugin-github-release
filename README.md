@@ -1,3 +1,7 @@
+
+> **Warning**
+> Archived in favor of just using the [GitHub CLI](https://cli.github.com/manual/gh_release) to create releases and upload assets.
+
 # GitHub Release plugin for [Poetry](https://github.com/python-poetry/poetry)
 
 [![black](https://github.com/milivojevicu/poetry-plugin-github-release/actions/workflows/black.yml/badge.svg)](https://github.com/milivojevicu/poetry-plugin-github-release/actions/workflows/black.yml)
